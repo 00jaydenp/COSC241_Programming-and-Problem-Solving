@@ -1,0 +1,122 @@
+package week08;
+
+import java.util.*;
+import java.io.*;
+
+/** Generated  plausable random words.
+    @author Jayden Prakash
+*/
+public class DigramGenerator implements WordGenerator {
+    
+    /** sets the random variable so that it is same through out.
+     */
+    private Random random;
+
+    /** initialises firstLetter variable.
+     */
+    private String firstLetter = "";
+
+    /** initialises the array of strings nextLetters.
+     */
+    private String[] nextLetters = new String[countLines()];
+
+    /** Constructor provided with code.
+        @param r to feed random seed to keep randomness consistent.
+    */
+    public DigramGenerator(Random r) {
+        random = r;
+        addFirst();
+        addNext();
+    }
+
+    /** Adds letters in firstLetters  string.
+        @return string made from first-letters.txt
+    */
+    public String addFirst(){
+        try{
+            Scanner sc = new Scanner (new File("first-letters.txt"));
+            firstLetter = sc.nextLine();
+        } catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        return firstLetter;
+    }
+
+    /** adds to array nextLetters.
+        @return array of strings.
+    */
+    public String[] addNext(){
+        try{
+            Scanner sc = new Scanner(new File("continuations.txt"));
+            while(sc.hasNextLine()){
+                for (int i = 0; i < nextLetters.length; i++){
+                    nextLetters[i] = sc.nextLine();
+                }
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        return nextLetters;
+    }
+        
+    
+    /** Count the lines in the continuations.txt.
+        @return count of lines, which sets the length of nextLetters array.
+    */
+    public int countLines(){
+        int count = 0;
+        try{
+            Scanner sc = new Scanner(new File("continuations.txt"));
+            while (sc.hasNextLine()){
+                count ++;
+                sc.nextLine();
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        return count;
+    }
+
+    /** Finds a random index for the first letter.
+        @return char to be the first letter
+    */
+    public char randomFirst (){
+        
+        int r = random.nextInt(firstLetter.length());
+        return firstLetter.charAt(r);
+    }
+
+    /** works out a random char to follow the first.
+        @param l first letter of the word.
+        @return char to follow first letter of the word.
+    */
+    public char randomNext(char l){
+
+        int index = (l-'a');
+        String line = nextLetters[index];
+        int m = random.nextInt(line.length());
+        return line.charAt(m);
+    }
+        
+    /** Builds a plausible word.
+        @param length is the lenght of the created word.
+        @return the randomly generated word.
+    */
+    public String nextWord(int length) {
+        StringBuilder result = new StringBuilder();
+        char c = 'a';
+        for (int i = 0; i < length; i++){
+            if (i == 0){
+                char f = randomFirst();
+                result.append(f);
+                c  = f;
+            } else {
+                char n = randomNext(c);
+                result.append(n);
+                c = n;
+            }
+        }
+        return result.toString();
+    }
+
+}

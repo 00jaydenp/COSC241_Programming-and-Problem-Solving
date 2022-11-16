@@ -1,0 +1,41 @@
+package week01;
+/**
+ * Jayden Prakash
+ * COSC 241
+ * Lab 01
+ * Counter.java
+ **/
+
+/** import scanner **/
+import java.util.Scanner;
+public class Counter{   
+    public static void main(String args []){
+       
+        /** Scanner to take in user input **/
+        Scanner sc = new Scanner(System.in);
+        
+        
+           
+            int lines = 0;
+            int words = 0;
+            /** Reads lines from input and returns amount using scanner
+             **/
+            while(sc.hasNextLine()){
+                String s = sc.nextLine();
+                lines++;
+                /** Reads tokens in input in a nested while loop to avoid
+                    reaching end of file before reading all tokens
+                 **/
+                Scanner word = new Scanner(s);
+                while(word.hasNext()){
+                    words++;
+                    word.next();
+                }
+                sc.nextLine();
+          }
+            System.out.println("lines: " + lines + "\n" + "words: " + words);
+      
+    }
+        
+    }
+

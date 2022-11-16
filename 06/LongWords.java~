@@ -1,0 +1,10 @@
+package week06;
+import java.util.*;
+/**
+ * A program that reads up to 100 words and calculates the average word length.
+ * 
+ * @author Jayden Prakash
+ */
+public class LongWords{
+    
+}

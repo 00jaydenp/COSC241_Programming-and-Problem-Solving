@@ -1,0 +1,8 @@
+1. Class hi is public, should be declare in a file name Hi.java
+2. hello, world!
+3. ')' expected, unclosed string literal, ';' expected, reached end of file while parsing
+4. unclosed string literal, ';' expected, reached end of file while parsing
+5. main method not found in class Hi, please define the main method...
+6.Cannot find symbol
+7. ';' expected
+8.reached end of file while parsing

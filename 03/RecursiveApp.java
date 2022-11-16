@@ -1,0 +1,38 @@
+package week03;
+/** COSC 241 Lab 03.
+    Recursive Methods
+    March 2020
+    @author Jayden Prakash
+**/
+public class RecursiveApp{
+    /** Main method testing out sumOfDigits() method.
+        @param args (unused)
+    **/
+    public static void main(String [] args){
+        // System.out.println(sumOfDigits(257));
+        //System.out.println(sumOfDigits(257));
+        
+                           
+    }
+
+    /** a method to calculate number of digits in input.
+        @param n (a long number)
+        @return long (number of digits in input)
+    **/
+    public static long digits(long n){
+        if(n<10){
+            return 1;
+        }
+        return 1 + digits(n/10);
+    }
+    /** method to calculate sum of digits in input.
+        @param n (a number of type long)
+        @return long (sum of digits in input)
+    **/
+    public static long sumOfDigits(long n){
+        if(n>=0 && n<10){
+            return n;
+        }
+        return (n%10 + sumOfDigits(n/10));
+    }
+}

@@ -1,0 +1,250 @@
+package week11;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.ArrayList;
+/**
+ * Cosc 241 Assignment CP class.
+ *
+ * @author Jayden Prakash, Dray Forster, Teina Grant
+ */
+public class CP implements CardPile{
+    /** Array representing a pile of cards.
+     */
+    private int[] pile;
+    /** Array that will hold the original pile.
+     */
+    private int[] original;
+    /** Array containing all possible specifications.
+     */
+    private static String[]  specs = {"TL", "BL", "TR", "BR", "LT",
+                                      "LB", "RT", "RB"};
+	/** Int variable that shows how many args are needed to use transform.
+	 * Specifically for input from the command line.
+	*/
+    private static final int ARGS =3;
+    /**
+     *  Entry point of the program.  Handles command line arguments.
+     *
+     *
+     * @param args the command line arguments.
+     */
+    public static void main(String[] args){
+        CP cp = new CP();
+		
+        if(args.length == 0){
+            cp.standardInput();
+        }
+        if(args.length == 2){
+            cp.load(Integer.parseInt(args[0]));
+            for(int i=0; i<specs.length; i++){
+                System.out.print(specs[i] +" ");
+                cp.count(Integer.parseInt(args[1]), specs[i]);
+            }
+        }
+        if(args.length >=ARGS){
+            cp.load(Integer.parseInt(args[0]));
+            int a = 2; //variable to access specifications in args
+            for(int i = 1; i < args.length; i++){
+                for(int x = 0; x<cp.getPile().length;x++){
+                    System.out.print(cp.getPile()[x]);
+		}
+                System.out.println();
+                try {
+                    cp.transform(Integer.parseInt(args[1]), args[a++]);
+                } catch(Exception e){
+                    a--;
+                }
+            }
+        }
+    }
+    /**
+     * Initialises card pile with numbers 1 to n.
+     *
+     *@param n int size to initialise the array with.
+     */
+    public void load(int n){
+        try{
+            if(n < 0){
+                throw new Exception();
+            }
+            this.pile = new int[n];
+            int x = 1;
+            for(int i = 0; i < n; i++){
+                this.pile[i] = x++;
+			}
+        }
+        catch(Exception cardPileException) {
+            System.out.println("Please enter a positive integer");
+        }
+        original = pile.clone();
+    }
+    /**
+     * Initialises card pile with given size.
+     *
+     *@param cards int array to set values of the pile equal to.
+     */
+    public  void load(int[] cards){
+        this.pile = new int[cards.length];
+        this.pile = cards.clone();
+        original = pile.clone();
+
+    }
+
+    /**
+     * Getter for the current pile of cards.
+     *
+	 * @return pile an array representing a pile of cards.
+     */
+    public  int [] getPile(){
+        return this.pile;
+    }
+
+    /**
+     * Transforms the card pile with a given specification.
+     *
+     * @param rowLength int representing the length of a row.
+     * @param spec string that specifies which way to shuffles cards.
+     */
+    public  void transform(int rowLength, String spec){
+        try{
+            if(pile.length%rowLength != 0){
+                throw new Exception();
+			}
+            int deck[][] = new int[(pile.length/rowLength)][rowLength];
+            int i = 0;
+            for(int r=0; r<(pile.length/rowLength); r++){
+                for( int c=0; c<rowLength; c++){
+                    deck[r][c]=pile[i++];
+                }
+            }
+            int k = 0;
+            switch(spec) {
+                case "TL":
+                    for(int c=0;c<rowLength;c++){
+                        for(int r=0; r<(pile.length/rowLength);r++){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "TR":
+                    for(int c=(rowLength-1);c>= 0;c--){
+                        for(int r=0; r<(pile.length/rowLength); r++){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "BL":
+                    for(int c=0;c<rowLength;c++){
+                        for(int r=(pile.length/rowLength)-1; r>= 0; r--){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "BR":
+                    for(int c=(rowLength-1);c>=0;c--){
+                        for(int r=(pile.length/rowLength)-1; r>=0; r--){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "LT":
+                    for(int r=0; r<(pile.length/rowLength); r++){
+                        for(int c=0;c<rowLength;c++){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "RT":
+                    for(int r=0; r<deck.length; r++){
+                        for(int c=(deck[r].length-1);c >= 0;c--){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "LB":
+                    for(int r=(pile.length/rowLength)-1; r >= 0; r--){
+                        for(int c=0;c<rowLength;c++){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+                case "RB":
+                    for(int r=(pile.length/rowLength)-1; r>= 0; r--){
+                        for(int c=(rowLength-1);c>=0;c--){
+                            pile[k++] = deck[r][c];
+                        }
+                    }break;
+            }
+        } catch (Exception cardPileException){
+            System.out.println("rowLength is not a multipe of the pile or spec unregonized");
+        }
+    }
+    /**
+     * Returns the amount of times a pile must be transformed 1
+	 * to return to its original state.
+     *
+     * @param rowLength int specifying length of each row in the pile.
+     * @param spec String specifying which way to pick up the cards.
+	 * @return count int specifies how many times a transformation is neccesary.
+     */
+    public  int count(int rowLength, String spec){
+        int count = 1;
+        transform(rowLength, spec);
+        while(!Arrays.equals(pile,original)){
+            transform(rowLength, spec);
+            count++;
+        }
+        System.out.println(count);
+        return count;
+    }
+	
+	/**
+	 * Method that deals with all input throuh stdin.
+	 *
+	 *
+	*/
+    public void standardInput(){
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            switch(sc.next()){
+                case "c":
+                    int rowl = sc.nextInt();
+                    String speci = sc.next();
+                    count(rowl, speci);
+                    break;
+                case "l":
+                    load(sc.nextInt());
+                    break;
+                case "L":
+                    ArrayList<Integer> inputs = new ArrayList<Integer>();
+                    while (sc.hasNextInt()){
+                        inputs.add(sc.nextInt());
+					}
+                    int [] cards = new int[inputs.size()];
+                    for(int i=0; i<cards.length; i++){
+                        cards[i]= inputs.get(i).intValue();
+					}
+                    load(cards);
+                    break;
+                case "p":
+                    for(int i=0; i<getPile().length; i++){
+                        System.out.print(getPile()[i] + " ");
+					}
+                    System.out.println(" ");
+                    break;
+                case "P":
+                    int rowsize = sc.nextInt();
+                    int p = 0;
+                    for(int i =0; i < getPile().length;i= i+rowsize){
+                        for(int x = 0; x < rowsize; x++){
+                            try  {
+                                System.out.print(getPile()[p++] + " ");
+                            } catch(Exception e){
+                                p--;
+                            }
+                        }
+                        System.out.println("");
+                    }
+                    break;
+                case "t":
+                    int rowlength = sc.nextInt();
+                    String spec = sc.next();
+                    transform(rowlength, spec);
+                    break;
+            }
+        }
+    }
+}

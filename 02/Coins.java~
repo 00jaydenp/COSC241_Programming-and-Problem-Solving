@@ -1,0 +1,88 @@
+package week02;
+import java.util.Random;
+/**
+   Lab02 COSC243 University of Otago
+   @author Jayden Prakash
+   March 2020
+**/
+public class Coins{
+
+    public static final boolean HEADS = true;
+    public static final boolean TAILS = false;
+    private boolean[] coins;
+
+    public static void main(String[] args) {
+        boolean[] b = {HEADS, TAILS, HEADS, HEADS, TAILS};
+        Coins c = new Coins(b);
+        System.out.println(c.toString());
+        Coins s = new Coins(c.toString());
+        System.out.println(s.toString());
+        Coins i = new Coins(5);
+        System.out.println(i.toString());
+    }
+    
+    public Coins(boolean[] coins) {
+        this.coins = coins;
+    }
+    /** Returns an int with the amount of heads in the array. **/
+    public int countHeads(){
+        int headsCount =0;
+        for(int i=0; i<coins.length;i++){
+            if(coins[i]== true){
+                headsCount++;
+            }
+        }
+        return headsCount;
+    }
+    /** toString method that returns a string representation of the coin tosses.
+        H represents every heads and T to represent tails.
+    **/
+    public String toString(){
+        String flipResult="";
+        for(int i=0; i<coins.length; i++){
+            
+            if(coins[i]==true){
+                flipResult += "H";
+            }
+            else{
+                flipResult +="T";
+            }
+            
+        }
+        return flipResult;
+    }
+    /** Creates a Coins object from a string consisting entirely of the characters H and T **/
+    public Coins(String c){
+        boolean [] x = new boolean[c.length()];
+        for(int i = 0; i < x.length; i++){
+            if(c.charAt(i) == 'H'){
+                x[i]= true;
+            }
+            else{
+                x[i]= false;
+            }
+        }
+        this.coins = x;
+    }
+                
+                    
+    /** Constructs a Coins object consisting of a series of length coins.
+        Value of each coin is determined by a random coin toss.
+    **/
+    public Coins(int length){
+        boolean[] a = new boolean[length];
+        Random ranInt = new Random();
+        for(int i = 0; i<a.length;i++){
+            int x = ranInt.nextInt(2);
+            if(x == 0){
+                a[i]=true;
+                    }
+            else{
+                a[i]=false;
+            }
+        }
+        this.coins=a;
+    }
+        
+    }
+
